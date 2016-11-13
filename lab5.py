@@ -1,70 +1,70 @@
-# coding: utf8 
-#Лазченко Влад. ВИС22. Лабораторная работа #5 
-
-import pyowm 
-from datetime import datetime 
-owm = pyowm.OWM('54da908969546080ba5c49b35dba176f') #получаем доступ к бд, используя API ключ 
-observation = owm.weather_at_place('Rostov-on-Don, RU') 
-weather = observation.get_weather() 
-location = observation.get_location() 
-translate_city = {'Rostov-na-Donu': 'Ростов-на-Дону', 'Moscow': 'Москва', 
-'New York': 'Нью-Йорк', 'London': 'Лодон', 'Toronto': 'Торонто'} 
-translate_country = {'RU': 'Россия', 'GB': 'Великобритания', 'CA': 'Канада', 'US': 'Соединённые Штаты Америки'} 
-
-
-def temperature(string): #функция выводит результат string - погода днём и ночью 
-f_observation = owm.daily_forecast('Rostov-on-Don, RU') 
-f_weather = f_observation.get_weather_at(datetime.now()) 
-return str(round(f_weather.get_temperature('celsius')[string])) 
-
-
-def cloudiness(): #соответствие числовых значений содержанию вывода 
-if 0 <= weather.get_clouds() <= 10: 
-return 'север' 
-
-if 10 < weather.get_clouds() <= 30: 
-return 'немного облачная' 
-
-if 30 < weather.get_clouds() <= 60: 
-return 'облачная' 
-
-if 60 < weather.get_clouds() <= 100: 
-return 'мрачная' 
-
-
-def status(x): #интерпретация значений переменных 
-return { 
-'10d' or '10n': ', дождь', 
-'09d' or '09n': ', ливень', 
-'11d' or '11n': ', гроза', 
-'13d' or '13n': ', снег', 
-'50d' or '50n': ', туман' 
-}.get(x, '') 
-
-
-def direction_wind(): #Определение интервалов значений для типа ветра 
-if 337.5 < weather.get_wind()['deg'] <= 22.5: 
-return 'северный' 
-if 157.5 < weather.get_wind()['deg'] <= 202.5: 
-return 'южный' 
-if 67.5 < weather.get_wind()['deg'] <= 112.5: 
-return 'восточный' 
-if 247.5 < weather.get_wind()['deg'] <= 292.5: 
-return 'западный' 
-if 22.5 < weather.get_wind()['deg'] <= 67.5: 
-return 'северо-восточный' 
-if 112.5 < weather.get_wind()['deg'] <= 157.5: 
-return 'юго-восточный' 
-if 202.5 < weather.get_wind()['deg'] <= 247.5: 
-return 'юго-западный' 
-if 292.5 < weather.get_wind()['deg'] <= 337.5: 
-return 'северо-западный' 
-
-
-#Вывод текстового варианта описания погоды 
-print('\nПогода в городе ' + translate_city[location.get_name()] + ' (' + translate_country[location.get_country()] + 
-') ' + 'на сегодня ' + str(datetime.now().strftime("%H:%M")) + ' ' + cloudiness() + ', \nоблачность составляет ' + 
-str(weather.get_clouds()) + ' %, давление ' + str(round(weather.get_pressure()['press'] * 0.750062)) + 
-' мм рт. ст.,\nтемпература ' + str(round(weather.get_temperature('celsius')['temp'])) + ' градусов Цельция' + 
-', днём ' + temperature('day') + ', ночью ' + temperature('night') + ', ветер ' + direction_wind() + ', ' + 
-str(round(weather.get_wind()['speed'])) + ' м/c' + status(weather.get_weather_icon_name()) + '.')
+# coding: utf8
+#Р›Р°Р·С‡РµРЅРєРѕ Р’Р»Р°Рґ. Р’РРЎ22. Р›Р°Р±РѕСЂР°С‚РѕСЂРЅР°СЏ СЂР°Р±РѕС‚Р° #5
+ 
+import pyowm
+from datetime import datetime
+owm = pyowm.OWM('54da908969546080ba5c49b35dba176f')  #РїРѕР»СѓС‡Р°РµРј РґРѕСЃС‚СѓРї Рє Р±Рґ, РёСЃРїРѕР»СЊР·СѓСЏ API РєР»СЋС‡
+observation = owm.weather_at_place('Rostov-on-Don, RU')
+weather = observation.get_weather()
+location = observation.get_location()
+translate_city = {'Rostov-na-Donu': 'Р РѕСЃС‚РѕРІ-РЅР°-Р”РѕРЅСѓ', 'Moscow': 'РњРѕСЃРєРІР°',
+                  'New York': 'РќСЊСЋ-Р™РѕСЂРє', 'London': 'Р›РѕРґРѕРЅ', 'Toronto': 'РўРѕСЂРѕРЅС‚Рѕ'}
+translate_country = {'RU': 'Р РѕСЃСЃРёСЏ', 'GB': 'Р’РµР»РёРєРѕР±СЂРёС‚Р°РЅРёСЏ', 'CA': 'РљР°РЅР°РґР°', 'US': 'РЎРѕРµРґРёРЅС‘РЅРЅС‹Рµ РЁС‚Р°С‚С‹ РђРјРµСЂРёРєРё'}
+ 
+ 
+def temperature(string): #С„СѓРЅРєС†РёСЏ РІС‹РІРѕРґРёС‚ СЂРµР·СѓР»СЊС‚Р°С‚ string - РїРѕРіРѕРґР° РґРЅС‘Рј Рё РЅРѕС‡СЊСЋ
+    f_observation = owm.daily_forecast('Rostov-on-Don, RU')
+    f_weather = f_observation.get_weather_at(datetime.now())
+    return str(round(f_weather.get_temperature('celsius')[string]))
+ 
+ 
+def cloudiness(): #СЃРѕРѕС‚РІРµС‚СЃС‚РІРёРµ С‡РёСЃР»РѕРІС‹С… Р·РЅР°С‡РµРЅРёР№ СЃРѕРґРµСЂР¶Р°РЅРёСЋ РІС‹РІРѕРґР°
+    if 0 <= weather.get_clouds() <= 10:
+        return 'СЃРµРІРµСЂ'
+ 
+    if 10 < weather.get_clouds() <= 30:
+        return 'РЅРµРјРЅРѕРіРѕ РѕР±Р»Р°С‡РЅР°СЏ'
+ 
+    if 30 < weather.get_clouds() <= 60:
+        return 'РѕР±Р»Р°С‡РЅР°СЏ'
+ 
+    if 60 < weather.get_clouds() <= 100:
+        return 'РјСЂР°С‡РЅР°СЏ'
+ 
+ 
+def status(x):   #РёРЅС‚РµСЂРїСЂРµС‚Р°С†РёСЏ Р·РЅР°С‡РµРЅРёР№ РїРµСЂРµРјРµРЅРЅС‹С…
+    return {
+        '10d' or '10n': ', РґРѕР¶РґСЊ',
+        '09d' or '09n': ', Р»РёРІРµРЅСЊ',
+        '11d' or '11n': ', РіСЂРѕР·Р°',
+        '13d' or '13n': ', СЃРЅРµРі',
+        '50d' or '50n': ', С‚СѓРјР°РЅ'
+    }.get(x, '')
+ 
+ 
+def direction_wind(): #РћРїСЂРµРґРµР»РµРЅРёРµ РёРЅС‚РµСЂРІР°Р»РѕРІ Р·РЅР°С‡РµРЅРёР№ РґР»СЏ С‚РёРїР° РІРµС‚СЂР°
+    if 337.5 < weather.get_wind()['deg'] <= 22.5:
+        return 'СЃРµРІРµСЂРЅС‹Р№'
+    if 157.5 < weather.get_wind()['deg'] <= 202.5:
+        return 'СЋР¶РЅС‹Р№'
+    if 67.5 < weather.get_wind()['deg'] <= 112.5:
+        return 'РІРѕСЃС‚РѕС‡РЅС‹Р№'
+    if 247.5 < weather.get_wind()['deg'] <= 292.5:
+        return 'Р·Р°РїР°РґРЅС‹Р№'
+    if 22.5 < weather.get_wind()['deg'] <= 67.5:
+        return 'СЃРµРІРµСЂРѕ-РІРѕСЃС‚РѕС‡РЅС‹Р№'
+    if 112.5 < weather.get_wind()['deg'] <= 157.5:
+        return 'СЋРіРѕ-РІРѕСЃС‚РѕС‡РЅС‹Р№'
+    if 202.5 < weather.get_wind()['deg'] <= 247.5:
+        return 'СЋРіРѕ-Р·Р°РїР°РґРЅС‹Р№'
+    if 292.5 < weather.get_wind()['deg'] <= 337.5:
+        return 'СЃРµРІРµСЂРѕ-Р·Р°РїР°РґРЅС‹Р№'
+ 
+ 
+#Р’С‹РІРѕРґ С‚РµРєСЃС‚РѕРІРѕРіРѕ РІР°СЂРёР°РЅС‚Р° РѕРїРёСЃР°РЅРёСЏ РїРѕРіРѕРґС‹
+    print('\nРџРѕРіРѕРґР° РІ РіРѕСЂРѕРґРµ ' + translate_city[location.get_name()] + ' (' + translate_country[location.get_country()] +
+      ') ' + 'РЅР° СЃРµРіРѕРґРЅСЏ ' + str(datetime.now().strftime("%H:%M")) + ' ' + cloudiness() + ', \nРѕР±Р»Р°С‡РЅРѕСЃС‚СЊ СЃРѕСЃС‚Р°РІР»СЏРµС‚ ' +
+      str(weather.get_clouds()) + ' %, РґР°РІР»РµРЅРёРµ ' + str(round(weather.get_pressure()['press'] * 0.750062)) +
+      ' РјРј СЂС‚. СЃС‚.,\nС‚РµРјРїРµСЂР°С‚СѓСЂР° ' + str(round(weather.get_temperature('celsius')['temp'])) + ' РіСЂР°РґСѓСЃРѕРІ Р¦РµР»СЊС†РёСЏ' +
+      ', РґРЅС‘Рј ' + temperature('day') + ', РЅРѕС‡СЊСЋ ' + temperature('night') + ', РІРµС‚РµСЂ ' + direction_wind() + ', ' +
+      str(round(weather.get_wind()['speed'])) + ' Рј/c' + status(weather.get_weather_icon_name()) + '.')
